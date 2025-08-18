@@ -1,0 +1,403 @@
+diff --git a/aquaterron/css/layout.css b/aquaterron/css/layout.css
+--- a/aquaterron/css/layout.css
++++ b/aquaterron/css/layout.css
+@@ -0,0 +1,399 @@
++/* Layout Styles */
++
++/* Loading Screen */
++.loading-screen {
++    position: fixed;
++    top: 0;
++    left: 0;
++    right: 0;
++    bottom: 0;
++    background: var(--gradient-primary);
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    z-index: var(--z-modal);
++    transition: opacity var(--transition-slow);
++}
++
++.loading-screen.hidden {
++    opacity: 0;
++    pointer-events: none;
++}
++
++.loading-content {
++    text-align: center;
++    color: white;
++}
++
++.loading-logo {
++    display: flex;
++    align-items: center;
++    gap: var(--space-4);
++    margin-bottom: var(--space-8);
++    font-size: var(--font-size-3xl);
++    font-weight: var(--font-weight-bold);
++}
++
++.loading-logo i {
++    font-size: var(--font-size-4xl);
++}
++
++.loading-spinner {
++    width: 40px;
++    height: 40px;
++    border: 4px solid rgba(255, 255, 255, 0.3);
++    border-top: 4px solid white;
++    border-radius: 50%;
++    animation: spin 1s linear infinite;
++    margin: 0 auto var(--space-4);
++}
++
++@keyframes spin {
++    0% { transform: rotate(0deg); }
++    100% { transform: rotate(360deg); }
++}
++
++/* Main App Container */
++.app {
++    display: flex;
++    min-height: 100vh;
++    background: var(--color-bg-secondary);
++}
++
++/* Sidebar */
++.sidebar {
++    width: var(--sidebar-width);
++    background: var(--color-bg-primary);
++    border-right: 1px solid var(--color-border-primary);
++    position: fixed;
++    top: 0;
++    left: 0;
++    height: 100vh;
++    z-index: var(--z-fixed);
++    transition: transform var(--transition-normal);
++    overflow-y: auto;
++}
++
++.sidebar.collapsed {
++    transform: translateX(-100%);
++}
++
++.sidebar-header {
++    padding: var(--space-6);
++    border-bottom: 1px solid var(--color-border-primary);
++    display: flex;
++    align-items: center;
++    justify-content: space-between;
++}
++
++.logo {
++    display: flex;
++    align-items: center;
++    gap: var(--space-3);
++    font-size: var(--font-size-xl);
++    font-weight: var(--font-weight-bold);
++    color: var(--color-text-primary);
++}
++
++.logo i {
++    color: var(--color-primary-500);
++}
++
++.sidebar-toggle {
++    background: none;
++    border: none;
++    font-size: var(--font-size-lg);
++    color: var(--color-text-tertiary);
++    cursor: pointer;
++    padding: var(--space-2);
++    border-radius: var(--radius-md);
++    transition: all var(--transition-fast);
++}
++
++.sidebar-toggle:hover {
++    background: var(--color-bg-secondary);
++    color: var(--color-text-primary);
++}
++
++.sidebar-nav {
++    padding: var(--space-4);
++}
++
++.nav-item {
++    margin-bottom: var(--space-2);
++}
++
++.nav-link {
++    display: flex;
++    align-items: center;
++    gap: var(--space-3);
++    padding: var(--space-3) var(--space-4);
++    color: var(--color-text-secondary);
++    text-decoration: none;
++    border-radius: var(--radius-lg);
++    transition: all var(--transition-fast);
++    font-weight: var(--font-weight-medium);
++}
++
++.nav-link:hover {
++    background: var(--color-bg-secondary);
++    color: var(--color-text-primary);
++}
++
++.nav-link.active {
++    background: var(--gradient-primary);
++    color: white;
++}
++
++.nav-link i {
++    width: 20px;
++    text-align: center;
++}
++
++/* Main Content */
++.main-content {
++    flex: 1;
++    margin-left: var(--sidebar-width);
++    transition: margin-left var(--transition-normal);
++}
++
++.main-content.expanded {
++    margin-left: 0;
++}
++
++/* Header */
++.header {
++    background: var(--color-bg-primary);
++    border-bottom: 1px solid var(--color-border-primary);
++    padding: var(--space-4) var(--space-6);
++    display: flex;
++    align-items: center;
++    justify-content: space-between;
++    position: sticky;
++    top: 0;
++    z-index: var(--z-sticky);
++}
++
++.header-left {
++    display: flex;
++    align-items: center;
++    gap: var(--space-4);
++}
++
++.header-title {
++    font-size: var(--font-size-xl);
++    font-weight: var(--font-weight-semibold);
++    color: var(--color-text-primary);
++    margin: 0;
++}
++
++.header-actions {
++    display: flex;
++    align-items: center;
++    gap: var(--space-3);
++}
++
++/* Content Area */
++.content {
++    padding: var(--space-6);
++    max-width: var(--container-max-width);
++    margin: 0 auto;
++}
++
++/* Sections */
++.section {
++    display: none;
++    animation: fadeIn var(--transition-normal);
++}
++
++.section.active {
++    display: block;
++}
++
++@keyframes fadeIn {
++    from {
++        opacity: 0;
++        transform: translateY(20px);
++    }
++    to {
++        opacity: 1;
++        transform: translateY(0);
++    }
++}
++
++.section-header {
++    margin-bottom: var(--space-8);
++    text-align: center;
++}
++
++.section-header h2 {
++    font-size: var(--font-size-4xl);
++    font-weight: var(--font-weight-bold);
++    color: var(--color-text-primary);
++    margin: 0;
++    margin-bottom: var(--space-4);
++}
++
++.section-header p {
++    font-size: var(--font-size-lg);
++    color: var(--color-text-secondary);
++    margin: 0;
++    max-width: 600px;
++    margin: 0 auto;
++}
++
++/* Dashboard Layout */
++.dashboard-stats {
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
++    gap: var(--space-6);
++    margin-bottom: var(--space-8);
++}
++
++.stat-card {
++    background: var(--color-bg-primary);
++    border: 1px solid var(--color-border-primary);
++    border-radius: var(--radius-xl);
++    padding: var(--space-6);
++    text-align: center;
++    transition: all var(--transition-fast);
++    box-shadow: var(--shadow-sm);
++}
++
++.stat-card:hover {
++    transform: translateY(-2px);
++    box-shadow: var(--shadow-md);
++}
++
++.stat-icon {
++    width: 60px;
++    height: 60px;
++    border-radius: var(--radius-xl);
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    font-size: var(--font-size-2xl);
++    color: white;
++    margin: 0 auto var(--space-4);
++}
++
++.stat-icon.fish {
++    background: var(--gradient-primary);
++}
++
++.stat-icon.plants {
++    background: var(--gradient-success);
++}
++
++.stat-icon.reptiles {
++    background: var(--gradient-warning);
++}
++
++.stat-icon.aquariums {
++    background: var(--gradient-secondary);
++}
++
++.stat-value {
++    font-size: var(--font-size-3xl);
++    font-weight: var(--font-weight-bold);
++    color: var(--color-text-primary);
++    margin: 0;
++    margin-bottom: var(--space-2);
++}
++
++.stat-label {
++    font-size: var(--font-size-sm);
++    color: var(--color-text-tertiary);
++    margin: 0;
++}
++
++.dashboard-actions {
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
++    gap: var(--space-6);
++    margin-bottom: var(--space-8);
++}
++
++.action-card {
++    background: var(--color-bg-primary);
++    border: 1px solid var(--color-border-primary);
++    border-radius: var(--radius-xl);
++    padding: var(--space-6);
++    transition: all var(--transition-fast);
++    cursor: pointer;
++    box-shadow: var(--shadow-sm);
++}
++
++.action-card:hover {
++    transform: translateY(-4px);
++    box-shadow: var(--shadow-lg);
++    border-color: var(--color-border-focus);
++}
++
++.action-card-header {
++    display: flex;
++    align-items: center;
++    gap: var(--space-4);
++    margin-bottom: var(--space-4);
++}
++
++.action-card-icon {
++    width: 48px;
++    height: 48px;
++    border-radius: var(--radius-lg);
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    font-size: var(--font-size-xl);
++    color: white;
++    background: var(--gradient-primary);
++}
++
++.action-card-title {
++    font-size: var(--font-size-lg);
++    font-weight: var(--font-weight-semibold);
++    color: var(--color-text-primary);
++    margin: 0;
++}
++
++.action-card-description {
++    color: var(--color-text-secondary);
++    margin-bottom: var(--space-4);
++    line-height: var(--line-height-relaxed);
++}
++
++.action-card-actions {
++    display: flex;
++    gap: var(--space-2);
++}
++
++/* Responsive Adjustments */
++@media (max-width: 768px) {
++    .sidebar {
++        transform: translateX(-100%);
++    }
++    
++    .sidebar.active {
++        transform: translateX(0);
++    }
++    
++    .main-content {
++        margin-left: 0;
++    }
++    
++    .dashboard-stats {
++        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
++    }
++    
++    .dashboard-actions {
++        grid-template-columns: 1fr;
++    }
++    
++    .header {
++        padding: var(--space-3) var(--space-4);
++    }
++    
++    .content {
++        padding: var(--space-4);
++    }
++}
