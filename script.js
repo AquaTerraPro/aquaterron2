@@ -1,391 +1,562 @@
-diff --git a/script.js b/script.js
---- a/script.js
-+++ b/script.js
-@@ -0,0 +1,387 @@
-+// Основная логика приложения Акватеррон
-+document.addEventListener('DOMContentLoaded', function() {
-+    // Инициализация навигации
-+    initNavigation();
-+    
-+    // Инициализация слайдеров
-+    initSliders();
-+    
-+    // Инициализация переключателей
-+    initToggles();
-+    
-+    // Инициализация кнопок действий
-+    initActionButtons();
-+    
-+    // Симуляция данных в реальном времени
-+    initRealTimeData();
-+    
-+    // Инициализация графика
-+    initChart();
-+});
+diff --git a/js/app.js b/js/app.js
+--- a/js/app.js
++++ b/js/app.js
+@@ -0,0 +1,558 @@
++// Главный файл приложения Акватеррон
 +
-+// Навигация между секциями
-+function initNavigation() {
-+    const navItems = document.querySelectorAll('.nav-item');
-+    const sections = document.querySelectorAll('.section');
-+    const pageTitle = document.getElementById('page-title');
-+    
-+    const titles = {
-+        'dashboard': 'Панель управления',
-+        'monitoring': 'Мониторинг',
-+        'control': 'Управление',
-+        'settings': 'Настройки'
-+    };
-+    
-+    navItems.forEach(item => {
-+        item.addEventListener('click', function(e) {
-+            e.preventDefault();
-+            
-+            // Убираем активный класс со всех элементов
-+            navItems.forEach(nav => nav.classList.remove('active'));
-+            sections.forEach(section => section.classList.remove('active'));
-+            
-+            // Добавляем активный класс к выбранному элементу
-+            this.classList.add('active');
-+            
-+            // Показываем соответствующую секцию
-+            const sectionId = this.getAttribute('data-section');
-+            const targetSection = document.getElementById(sectionId);
-+            if (targetSection) {
-+                targetSection.classList.add('active');
-+                pageTitle.textContent = titles[sectionId] || 'Акватеррон';
-+            }
-+        });
-+    });
-+}
-+
-+// Инициализация слайдеров
-+function initSliders() {
-+    const sliders = document.querySelectorAll('.slider');
-+    
-+    sliders.forEach(slider => {
-+        const valueDisplay = slider.nextElementSibling;
++class AquaTerronApp {
++    constructor() {
++        this.currentSection = 'dashboard';
++        this.isLoading = true;
++        this.theme = localStorage.getItem('theme') || 'light';
++        this.language = localStorage.getItem('language') || 'ru';
 +        
-+        // Обновляем значение при изменении слайдера
-+        slider.addEventListener('input', function() {
-+            if (this.id === 'tempSlider') {
-+                valueDisplay.textContent = this.value + '°C';
-+                updateStatCard('Температура', this.value + '°C');
-+            } else if (this.id === 'humiditySlider') {
-+                valueDisplay.textContent = this.value + '%';
-+                updateStatCard('Влажность', this.value + '%');
-+            }
-+        });
-+    });
-+}
++        this.init();
++    }
 +
-+// Инициализация переключателей
-+function initToggles() {
-+    const toggles = document.querySelectorAll('.toggle');
-+    
-+    toggles.forEach(toggle => {
-+        toggle.addEventListener('change', function() {
-+            if (this.id === 'lightToggle') {
-+                const status = this.checked ? 'Включено' : 'Выключено';
-+                updateStatCard('Освещение', status);
++    init() {
++        // Инициализация после загрузки DOM
++        document.addEventListener('DOMContentLoaded', () => {
++            this.setupEventListeners();
++            this.applyTheme();
++            this.showLoadingScreen();
++            this.loadApp();
++        });
++    }
++
++    setupEventListeners() {
++        // Навигация
++        this.setupNavigation();
++        
++        // Переключение темы
++        this.setupThemeToggle();
++        
++        // Боковая панель
++        this.setupSidebar();
++        
++        // Поиск
++        this.setupSearch();
++        
++        // Модальные окна
++        this.setupModals();
++        
++        // Адаптивность
++        this.setupResponsive();
++    }
++
++    setupNavigation() {
++        const navLinks = document.querySelectorAll('.nav-link');
++        
++        navLinks.forEach(link => {
++            link.addEventListener('click', (e) => {
++                e.preventDefault();
++                const section = link.getAttribute('data-section');
++                this.showSection(section);
++            });
++        });
++    }
++
++    setupThemeToggle() {
++        const themeToggle = document.getElementById('theme-toggle');
++        if (themeToggle) {
++            themeToggle.addEventListener('click', () => {
++                this.toggleTheme();
++            });
++        }
++    }
++
++    setupSidebar() {
++        const sidebarToggle = document.getElementById('sidebar-toggle');
++        const sidebar = document.getElementById('sidebar');
++        
++        if (sidebarToggle && sidebar) {
++            sidebarToggle.addEventListener('click', () => {
++                sidebar.classList.toggle('collapsed');
++            });
++        }
++
++        // Закрытие сайдбара на мобильных устройствах при клике вне его
++        document.addEventListener('click', (e) => {
++            if (window.innerWidth <= 1023) {
++                const sidebar = document.getElementById('sidebar');
++                const sidebarToggle = document.getElementById('sidebar-toggle');
 +                
-+                // Добавляем запись в логи
-+                addLogEntry('INFO', `Освещение ${this.checked ? 'включено' : 'выключено'}`);
-+            }
-+        });
-+    });
-+}
-+
-+// Инициализация кнопок действий
-+function initActionButtons() {
-+    const actionButtons = document.querySelectorAll('.action-btn');
-+    
-+    actionButtons.forEach(button => {
-+        button.addEventListener('click', function() {
-+            const action = this.textContent.trim();
-+            
-+            // Добавляем визуальный эффект нажатия
-+            this.style.transform = 'scale(0.95)';
-+            setTimeout(() => {
-+                this.style.transform = '';
-+            }, 150);
-+            
-+            // Обрабатываем различные действия
-+            switch(action) {
-+                case 'Автоматический режим':
-+                    enableAutoMode();
-+                    break;
-+                case 'Пауза':
-+                    pauseSystem();
-+                    break;
-+                case 'Аварийная остановка':
-+                    emergencyStop();
-+                    break;
-+            }
-+        });
-+    });
-+}
-+
-+// Включение автоматического режима
-+function enableAutoMode() {
-+    addLogEntry('INFO', 'Автоматический режим включен');
-+    
-+    // Анимация изменения статуса
-+    const statusElements = document.querySelectorAll('.stat-status');
-+    statusElements.forEach(status => {
-+        if (status.textContent === 'Норма' || status.textContent === 'Активно') {
-+            status.textContent = 'Авто';
-+            status.className = 'stat-status active';
-+        }
-+    });
-+    
-+    // Показываем уведомление
-+    showNotification('Автоматический режим включен', 'success');
-+}
-+
-+// Пауза системы
-+function pauseSystem() {
-+    addLogEntry('WARN', 'Система приостановлена');
-+    
-+    // Анимация изменения статуса
-+    const statusElements = document.querySelectorAll('.stat-status');
-+    statusElements.forEach(status => {
-+        status.textContent = 'Пауза';
-+        status.className = 'stat-status warning';
-+    });
-+    
-+    showNotification('Система приостановлена', 'warning');
-+}
-+
-+// Аварийная остановка
-+function emergencyStop() {
-+    addLogEntry('ERROR', 'Аварийная остановка системы');
-+    
-+    // Анимация изменения статуса
-+    const statusElements = document.querySelectorAll('.stat-status');
-+    statusElements.forEach(status => {
-+        status.textContent = 'Остановлено';
-+        status.className = 'stat-status warning';
-+    });
-+    
-+    showNotification('Аварийная остановка выполнена', 'error');
-+}
-+
-+// Обновление статистических карточек
-+function updateStatCard(title, value) {
-+    const statCards = document.querySelectorAll('.stat-card');
-+    
-+    statCards.forEach(card => {
-+        const cardTitle = card.querySelector('h3').textContent;
-+        if (cardTitle === title) {
-+            const valueElement = card.querySelector('.stat-value');
-+            valueElement.textContent = value;
-+            
-+            // Добавляем анимацию обновления
-+            valueElement.style.transform = 'scale(1.1)';
-+            setTimeout(() => {
-+                valueElement.style.transform = 'scale(1)';
-+            }, 200);
-+        }
-+    });
-+}
-+
-+// Добавление записи в логи
-+function addLogEntry(level, message) {
-+    const logContainer = document.querySelector('.log-container');
-+    if (!logContainer) return;
-+    
-+    const logEntry = document.createElement('div');
-+    logEntry.className = 'log-entry';
-+    
-+    const time = new Date().toLocaleTimeString();
-+    
-+    logEntry.innerHTML = `
-+        <span class="log-time">${time}</span>
-+        <span class="log-level ${level.toLowerCase()}">${level}</span>
-+        <span class="log-message">${message}</span>
-+    `;
-+    
-+    // Добавляем новую запись в начало
-+    logContainer.insertBefore(logEntry, logContainer.firstChild);
-+    
-+    // Ограничиваем количество записей
-+    const entries = logContainer.querySelectorAll('.log-entry');
-+    if (entries.length > 10) {
-+        logContainer.removeChild(entries[entries.length - 1]);
-+    }
-+}
-+
-+// Показ уведомлений
-+function showNotification(message, type = 'info') {
-+    // Создаем элемент уведомления
-+    const notification = document.createElement('div');
-+    notification.className = `notification ${type}`;
-+    notification.textContent = message;
-+    
-+    // Стили для уведомления
-+    notification.style.cssText = `
-+        position: fixed;
-+        top: 20px;
-+        right: 20px;
-+        padding: 1rem 1.5rem;
-+        border-radius: 8px;
-+        color: white;
-+        font-weight: 500;
-+        z-index: 1000;
-+        transform: translateX(100%);
-+        transition: transform 0.3s ease;
-+        max-width: 300px;
-+    `;
-+    
-+    // Цвета для разных типов уведомлений
-+    const colors = {
-+        success: '#22c55e',
-+        warning: '#f59e0b',
-+        error: '#ef4444',
-+        info: '#3b82f6'
-+    };
-+    
-+    notification.style.background = colors[type] || colors.info;
-+    
-+    document.body.appendChild(notification);
-+    
-+    // Анимация появления
-+    setTimeout(() => {
-+        notification.style.transform = 'translateX(0)';
-+    }, 100);
-+    
-+    // Автоматическое удаление через 3 секунды
-+    setTimeout(() => {
-+        notification.style.transform = 'translateX(100%)';
-+        setTimeout(() => {
-+            if (notification.parentNode) {
-+                notification.parentNode.removeChild(notification);
-+            }
-+        }, 300);
-+    }, 3000);
-+}
-+
-+// Симуляция данных в реальном времени
-+function initRealTimeData() {
-+    setInterval(() => {
-+        // Симулируем изменение температуры
-+        const tempSlider = document.getElementById('tempSlider');
-+        if (tempSlider) {
-+            const currentTemp = parseFloat(tempSlider.value);
-+            const variation = (Math.random() - 0.5) * 2; // ±1°C
-+            const newTemp = Math.max(15, Math.min(35, currentTemp + variation));
-+            tempSlider.value = newTemp;
-+            
-+            // Обновляем отображение
-+            const valueDisplay = tempSlider.nextElementSibling;
-+            valueDisplay.textContent = newTemp.toFixed(1) + '°C';
-+            updateStatCard('Температура', newTemp.toFixed(1) + '°C');
-+        }
-+        
-+        // Симулируем изменение влажности
-+        const humiditySlider = document.getElementById('humiditySlider');
-+        if (humiditySlider) {
-+            const currentHumidity = parseFloat(humiditySlider.value);
-+            const variation = (Math.random() - 0.5) * 4; // ±2%
-+            const newHumidity = Math.max(30, Math.min(90, currentHumidity + variation));
-+            humiditySlider.value = newHumidity;
-+            
-+            // Обновляем отображение
-+            const valueDisplay = humiditySlider.nextElementSibling;
-+            valueDisplay.textContent = Math.round(newHumidity) + '%';
-+            updateStatCard('Влажность', Math.round(newHumidity) + '%');
-+        }
-+        
-+        // Симулируем изменение энергии
-+        const energyValue = Math.max(20, Math.min(100, 78 + (Math.random() - 0.5) * 10));
-+        updateStatCard('Энергия', Math.round(energyValue) + '%');
-+        
-+    }, 5000); // Обновляем каждые 5 секунд
-+}
-+
-+// Инициализация графика
-+function initChart() {
-+    const canvas = document.getElementById('tempChart');
-+    if (!canvas) return;
-+    
-+    const ctx = canvas.getContext('2d');
-+    canvas.width = canvas.offsetWidth;
-+    canvas.height = 200;
-+    
-+    // Создаем простой график
-+    const data = [];
-+    for (let i = 0; i < 24; i++) {
-+        data.push(20 + Math.sin(i * 0.3) * 5 + Math.random() * 2);
-+    }
-+    
-+    // Рисуем график
-+    ctx.strokeStyle = '#667eea';
-+    ctx.lineWidth = 2;
-+    ctx.beginPath();
-+    
-+    const stepX = canvas.width / (data.length - 1);
-+    const stepY = canvas.height / 20;
-+    
-+    data.forEach((value, index) => {
-+        const x = index * stepX;
-+        const y = canvas.height - (value - 15) * stepY;
-+        
-+        if (index === 0) {
-+            ctx.moveTo(x, y);
-+        } else {
-+            ctx.lineTo(x, y);
-+        }
-+    });
-+    
-+    ctx.stroke();
-+    
-+    // Добавляем точки
-+    ctx.fillStyle = '#667eea';
-+    data.forEach((value, index) => {
-+        const x = index * stepX;
-+        const y = canvas.height - (value - 15) * stepY;
-+        
-+        ctx.beginPath();
-+        ctx.arc(x, y, 3, 0, 2 * Math.PI);
-+        ctx.fill();
-+    });
-+}
-+
-+// Обработка изменений в настройках
-+document.addEventListener('change', function(e) {
-+    if (e.target.type === 'checkbox' && e.target.closest('.automation-settings')) {
-+        const settingName = e.target.parentElement.textContent.trim();
-+        const status = e.target.checked ? 'включена' : 'отключена';
-+        addLogEntry('INFO', `Автоматизация "${settingName}" ${status}`);
-+    }
-+    
-+    if (e.target.classList.contains('setting-select')) {
-+        const settingName = e.target.previousElementSibling.textContent;
-+        const value = e.target.value;
-+        addLogEntry('INFO', `Настройка "${settingName}" изменена на "${value}"`);
-+    }
-+});
-+
-+// Добавляем обработчик для клавиши Escape (закрытие уведомлений)
-+document.addEventListener('keydown', function(e) {
-+    if (e.key === 'Escape') {
-+        const notifications = document.querySelectorAll('.notification');
-+        notifications.forEach(notification => {
-+            notification.style.transform = 'translateX(100%)';
-+            setTimeout(() => {
-+                if (notification.parentNode) {
-+                    notification.parentNode.removeChild(notification);
++                if (sidebar && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
++                    sidebar.classList.remove('open');
 +                }
-+            }, 300);
++            }
 +        });
 +    }
-+});
 +
-+// Инициализация при загрузке страницы
-+window.addEventListener('load', function() {
-+    // Добавляем приветственное сообщение
-+    setTimeout(() => {
-+        addLogEntry('INFO', 'Система Акватеррон полностью загружена');
-+        showNotification('Добро пожаловать в Акватеррон!', 'success');
-+    }, 1000);
++    setupSearch() {
++        const searchBtn = document.getElementById('search-btn');
++        const searchInput = document.getElementById('search-input');
++        
++        if (searchBtn) {
++            searchBtn.addEventListener('click', () => {
++                this.showSection('catalog');
++                if (searchInput) {
++                    searchInput.focus();
++                }
++            });
++        }
++    }
++
++    setupModals() {
++        const modalOverlay = document.getElementById('modal-overlay');
++        
++        if (modalOverlay) {
++            modalOverlay.addEventListener('click', (e) => {
++                if (e.target === modalOverlay) {
++                    this.closeAllModals();
++                }
++            });
++        }
++
++        // Закрытие модальных окон по Escape
++        document.addEventListener('keydown', (e) => {
++            if (e.key === 'Escape') {
++                this.closeAllModals();
++            }
++        });
++    }
++
++    setupResponsive() {
++        // Обработка изменения размера окна
++        window.addEventListener('resize', () => {
++            this.handleResize();
++        });
++
++        // Обработка ориентации устройства
++        window.addEventListener('orientationchange', () => {
++            setTimeout(() => {
++                this.handleResize();
++            }, 100);
++        });
++    }
++
++    handleResize() {
++        const sidebar = document.getElementById('sidebar');
++        
++        if (window.innerWidth > 1023) {
++            sidebar.classList.remove('open');
++        }
++    }
++
++    showLoadingScreen() {
++        const loadingScreen = document.getElementById('loading-screen');
++        const app = document.getElementById('app');
++        
++        if (loadingScreen && app) {
++            loadingScreen.style.display = 'flex';
++            app.classList.add('hidden');
++        }
++    }
++
++    hideLoadingScreen() {
++        const loadingScreen = document.getElementById('loading-screen');
++        const app = document.getElementById('app');
++        
++        if (loadingScreen && app) {
++            setTimeout(() => {
++                loadingScreen.style.display = 'none';
++                app.classList.remove('hidden');
++                this.isLoading = false;
++            }, 1500);
++        }
++    }
++
++    async loadApp() {
++        try {
++            // Симуляция загрузки данных
++            await this.loadInitialData();
++            
++            // Инициализация компонентов
++            this.initializeComponents();
++            
++            // Скрытие экрана загрузки
++            this.hideLoadingScreen();
++            
++            // Показ главной страницы
++            this.showSection('dashboard');
++            
++        } catch (error) {
++            console.error('Ошибка загрузки приложения:', error);
++            this.showError('Ошибка загрузки приложения');
++        }
++    }
++
++    async loadInitialData() {
++        // Симуляция загрузки данных
++        return new Promise((resolve) => {
++            setTimeout(resolve, 1000);
++        });
++    }
++
++    initializeComponents() {
++        // Инициализация утилит
++        if (window.StorageUtils) {
++            window.StorageUtils.init();
++        }
++        
++        if (window.NotificationUtils) {
++            window.NotificationUtils.init();
++        }
++
++        // Инициализация компонентов
++        if (window.ModalComponent) {
++            window.ModalComponent.init();
++        }
++
++        if (window.SearchComponent) {
++            window.SearchComponent.init();
++        }
++
++        // Инициализация страниц
++        if (window.DashboardPage) {
++            window.DashboardPage.init();
++        }
++
++        if (window.CatalogPage) {
++            window.CatalogPage.init();
++        }
++
++        if (window.CompatibilityPage) {
++            window.CompatibilityPage.init();
++        }
++
++        if (window.AquariumsPage) {
++            window.AquariumsPage.init();
++        }
++
++        if (window.CalculatorPage) {
++            window.CalculatorPage.init();
++        }
++
++        if (window.ProfilePage) {
++            window.ProfilePage.init();
++        }
++    }
++
++    showSection(sectionName) {
++        // Скрытие всех секций
++        const sections = document.querySelectorAll('.section');
++        sections.forEach(section => {
++            section.classList.remove('active');
++        });
++
++        // Удаление активного класса у всех ссылок
++        const navLinks = document.querySelectorAll('.nav-link');
++        navLinks.forEach(link => {
++            link.classList.remove('active');
++        });
++
++        // Показ выбранной секции
++        const targetSection = document.getElementById(sectionName);
++        if (targetSection) {
++            targetSection.classList.add('active');
++        }
++
++        // Активация соответствующей ссылки
++        const targetLink = document.querySelector(`[data-section="${sectionName}"]`);
++        if (targetLink) {
++            targetLink.classList.add('active');
++        }
++
++        // Обновление заголовка страницы
++        this.updatePageTitle(sectionName);
++
++        // Сохранение текущей секции
++        this.currentSection = sectionName;
++
++        // Закрытие сайдбара на мобильных устройствах
++        if (window.innerWidth <= 1023) {
++            const sidebar = document.getElementById('sidebar');
++            if (sidebar) {
++                sidebar.classList.remove('open');
++            }
++        }
++
++        // Вызов инициализации страницы
++        this.initializePage(sectionName);
++    }
++
++    updatePageTitle(sectionName) {
++        const pageTitle = document.getElementById('page-title');
++        const pageDescription = document.getElementById('page-description');
++
++        const titles = {
++            dashboard: {
++                title: 'Главная',
++                description: 'Планирование идеального аквариума'
++            },
++            catalog: {
++                title: 'Каталог',
++                description: 'Поиск и фильтрация по базе данных'
++            },
++            compatibility: {
++                title: 'Совместимость',
++                description: 'Проверка совместимости видов'
++            },
++            'my-aquariums': {
++                title: 'Мои аквариумы',
++                description: 'Управление вашими аквариумами'
++            },
++            calculator: {
++                title: 'Калькулятор',
++                description: 'Расчет параметров аквариума'
++            },
++            calendar: {
++                title: 'Календарь',
++                description: 'Планировщик задач и история обслуживания'
++            },
++            forum: {
++                title: 'Форум',
++                description: 'Обсуждения и советы сообщества'
++            },
++            freelance: {
++                title: 'Специалисты',
++                description: 'Поиск мастеров и консультации'
++            },
++            profile: {
++                title: 'Профиль',
++                description: 'Настройки аккаунта'
++            }
++        };
++
++        const sectionInfo = titles[sectionName] || {
++            title: 'Страница',
++            description: 'Описание страницы'
++        };
++
++        if (pageTitle) {
++            pageTitle.textContent = sectionInfo.title;
++        }
++
++        if (pageDescription) {
++            pageDescription.textContent = sectionInfo.description;
++        }
++    }
++
++    initializePage(sectionName) {
++        // Инициализация конкретной страницы
++        switch (sectionName) {
++            case 'dashboard':
++                if (window.DashboardPage) {
++                    window.DashboardPage.onShow();
++                }
++                break;
++            case 'catalog':
++                if (window.CatalogPage) {
++                    window.CatalogPage.onShow();
++                }
++                break;
++            case 'compatibility':
++                if (window.CompatibilityPage) {
++                    window.CompatibilityPage.onShow();
++                }
++                break;
++            case 'my-aquariums':
++                if (window.AquariumsPage) {
++                    window.AquariumsPage.onShow();
++                }
++                break;
++            case 'calculator':
++                if (window.CalculatorPage) {
++                    window.CalculatorPage.onShow();
++                }
++                break;
++            case 'calendar':
++                if (window.CalendarPage) {
++                    window.CalendarPage.onShow();
++                }
++                break;
++            case 'forum':
++                if (window.ForumPage) {
++                    window.ForumPage.onShow();
++                }
++                break;
++            case 'freelance':
++                if (window.FreelancePage) {
++                    window.FreelancePage.onShow();
++                }
++                break;
++            case 'profile':
++                if (window.ProfilePage) {
++                    window.ProfilePage.onShow();
++                }
++                break;
++        }
++    }
++
++    toggleTheme() {
++        this.theme = this.theme === 'light' ? 'dark' : 'light';
++        this.applyTheme();
++        localStorage.setItem('theme', this.theme);
++    }
++
++    applyTheme() {
++        document.documentElement.setAttribute('data-theme', this.theme);
++        
++        const themeToggle = document.getElementById('theme-toggle');
++        if (themeToggle) {
++            const icon = themeToggle.querySelector('i');
++            if (icon) {
++                icon.className = this.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
++            }
++        }
++    }
++
++    openModal(modalId) {
++        const modal = document.getElementById(modalId);
++        const overlay = document.getElementById('modal-overlay');
++        
++        if (modal && overlay) {
++            modal.classList.add('open');
++            overlay.style.display = 'block';
++            document.body.style.overflow = 'hidden';
++        }
++    }
++
++    closeModal(modalId) {
++        const modal = document.getElementById(modalId);
++        const overlay = document.getElementById('modal-overlay');
++        
++        if (modal) {
++            modal.classList.remove('open');
++        }
++        
++        // Проверяем, есть ли другие открытые модальные окна
++        const openModals = document.querySelectorAll('.modal.open');
++        if (openModals.length === 0) {
++            if (overlay) {
++                overlay.style.display = 'none';
++            }
++            document.body.style.overflow = '';
++        }
++    }
++
++    closeAllModals() {
++        const modals = document.querySelectorAll('.modal');
++        const overlay = document.getElementById('modal-overlay');
++        
++        modals.forEach(modal => {
++            modal.classList.remove('open');
++        });
++        
++        if (overlay) {
++            overlay.style.display = 'none';
++        }
++        
++        document.body.style.overflow = '';
++    }
++
++    showNotification(message, type = 'info', duration = 5000) {
++        if (window.NotificationUtils) {
++            window.NotificationUtils.show(message, type, duration);
++        }
++    }
++
++    showError(message) {
++        this.showNotification(message, 'error');
++    }
++
++    showSuccess(message) {
++        this.showNotification(message, 'success');
++    }
++
++    showWarning(message) {
++        this.showNotification(message, 'warning');
++    }
++
++    // Утилиты для работы с данными
++    getSpeciesById(id) {
++        if (window.SpeciesDatabase) {
++            return window.SpeciesDatabase.getSpeciesById(id);
++        }
++        return null;
++    }
++
++    searchSpecies(query) {
++        if (window.SpeciesDatabase) {
++            return window.SpeciesDatabase.searchSpecies(query);
++        }
++        return [];
++    }
++
++    checkCompatibility(species1, species2) {
++        if (window.SpeciesDatabase) {
++            return window.SpeciesDatabase.checkCompatibility(species1, species2);
++        }
++        return { compatible: false, reason: 'База данных недоступна' };
++    }
++
++    // Утилиты для работы с хранилищем
++    saveToStorage(key, value) {
++        if (window.StorageUtils) {
++            window.StorageUtils.set(key, value);
++        }
++    }
++
++    getFromStorage(key, defaultValue = null) {
++        if (window.StorageUtils) {
++            return window.StorageUtils.get(key, defaultValue);
++        }
++        return defaultValue;
++    }
++
++    removeFromStorage(key) {
++        if (window.StorageUtils) {
++            window.StorageUtils.remove(key);
++        }
++    }
++
++    // Утилиты для работы с URL
++    updateURL(section) {
++        if (history.pushState) {
++            const url = new URL(window.location);
++            url.hash = `#${section}`;
++            history.pushState({}, '', url);
++        }
++    }
++
++    getCurrentSectionFromURL() {
++        const hash = window.location.hash;
++        if (hash) {
++            return hash.substring(1);
++        }
++        return 'dashboard';
++    }
++
++    // Обработка навигации по браузеру
++    handleBrowserNavigation() {
++        window.addEventListener('popstate', () => {
++            const section = this.getCurrentSectionFromURL();
++            this.showSection(section);
++        });
++    }
++}
++
++// Глобальные функции для совместимости
++window.showSection = function(sectionName) {
++    if (window.app) {
++        window.app.showSection(sectionName);
++    }
++};
++
++window.openModal = function(modalId) {
++    if (window.app) {
++        window.app.openModal(modalId);
++    }
++};
++
++window.closeModal = function(modalId) {
++    if (window.app) {
++        window.app.closeModal(modalId);
++    }
++};
++
++// Инициализация приложения
++document.addEventListener('DOMContentLoaded', () => {
++    window.app = new AquaTerronApp();
 +});
