@@ -1,145 +1,96 @@
-diff --git a/css/reset.css b/css/reset.css
---- a/css/reset.css
-+++ b/css/reset.css
-@@ -0,0 +1,141 @@
-+/* CSS Reset */
-+*,
-+*::before,
-+*::after {
-+    box-sizing: border-box;
-+    margin: 0;
-+    padding: 0;
-+}
-+
-+html {
-+    font-size: 16px;
-+    scroll-behavior: smooth;
-+}
-+
-+body {
-+    line-height: 1.6;
-+    -webkit-font-smoothing: antialiased;
-+    -moz-osx-font-smoothing: grayscale;
-+    text-rendering: optimizeLegibility;
-+}
-+
-+img,
-+picture,
-+video,
-+canvas,
-+svg {
-+    display: block;
-+    max-width: 100%;
-+}
-+
-+input,
-+button,
-+textarea,
-+select {
-+    font: inherit;
-+    color: inherit;
-+}
-+
-+button {
-+    background: none;
-+    border: none;
-+    cursor: pointer;
-+}
-+
-+a {
-+    text-decoration: none;
-+    color: inherit;
-+}
-+
-+ul,
-+ol {
-+    list-style: none;
-+}
-+
-+h1,
-+h2,
-+h3,
-+h4,
-+h5,
-+h6 {
-+    font-weight: inherit;
-+    font-size: inherit;
-+}
-+
-+p {
-+    overflow-wrap: break-word;
-+}
-+
-+#root,
-+#__next {
-+    isolation: isolate;
-+}
-+
-+/* Remove default focus styles */
-+*:focus {
-+    outline: none;
-+}
-+
-+/* Remove default button styles */
-+button {
-+    appearance: none;
-+    -webkit-appearance: none;
-+    -moz-appearance: none;
-+}
-+
-+/* Remove default input styles */
-+input[type="range"] {
-+    -webkit-appearance: none;
-+    appearance: none;
-+}
-+
-+input[type="checkbox"] {
-+    appearance: none;
-+    -webkit-appearance: none;
-+    -moz-appearance: none;
-+}
-+
-+/* Remove default select styles */
-+select {
-+    appearance: none;
-+    -webkit-appearance: none;
-+    -moz-appearance: none;
-+}
-+
-+/* Remove default table styles */
-+table {
-+    border-collapse: collapse;
-+    border-spacing: 0;
-+}
-+
-+/* Remove default fieldset styles */
-+fieldset {
-+    border: none;
-+    margin: 0;
-+    padding: 0;
-+}
-+
-+/* Remove default legend styles */
-+legend {
-+    padding: 0;
-+}
-+
-+/* Remove default details styles */
-+details {
-+    display: block;
-+}
-+
-+/* Remove default summary styles */
-+summary {
-+    display: list-item;
-+}
-+
-+/* Remove default template styles */
-+template {
-+    display: none;
-+}
-+
-+/* Remove default hidden styles */
-+[hidden] {
-+    display: none !important;
-+}
+/* CSS Reset */
+*,
+*::before,
+*::after {
+}
+
+html {
+}
+
+body {
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+}
+
+input,
+button,
+textarea,
+select {
+}
+
+button {
+}
+
+a {
+}
+
+ul,
+ol {
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+}
+
+p {
+}
+
+#root,
+#__next {
+}
+
+/* Remove default focus styles */
+*:focus {
+}
+
+/* Remove default button styles */
+button {
+}
+
+/* Remove default input styles */
+input[type="range"] {
+}
+
+input[type="checkbox"] {
+}
+
+/* Remove default select styles */
+select {
+}
+
+/* Remove default table styles */
+table {
+}
+
+/* Remove default fieldset styles */
+fieldset {
+}
+
+/* Remove default legend styles */
+legend {
+}
+
+/* Remove default details styles */
+details {
+}
+
+/* Remove default summary styles */
+summary {
+}
+
+/* Remove default template styles */
+template {
+}
+
+/* Remove default hidden styles */
+[hidden] {
+}
