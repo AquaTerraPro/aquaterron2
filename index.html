@@ -1,681 +1,220 @@
-diff --git a/index.html b/index.html
---- a/index.html
-+++ b/index.html
-@@ -0,0 +1,677 @@
-+<!DOCTYPE html>
-+<html lang="ru">
-+<head>
-+    <meta charset="UTF-8">
-+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-+    <meta name="description" content="Акватеррон - Система планирования аквариумов и террариумов с базой данных рыб, растений и рептилий">
-+    <meta name="keywords" content="аквариум, террариум, рыбы, растения, рептилии, совместимость, планирование">
-+    <meta name="author" content="Акватеррон Team">
-+    
-+    <title>Акватеррон - Планирование аквариумов и террариумов</title>
-+    
-+    <!-- Favicon -->
-+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-+    
-+    <!-- Fonts -->
-+    <link rel="preconnect" href="https://fonts.googleapis.com">
-+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-+    
-+    <!-- Icons -->
-+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-+    
-+    <!-- Styles -->
-+    <link rel="stylesheet" href="css/reset.css">
-+    <link rel="stylesheet" href="css/variables.css">
-+    <link rel="stylesheet" href="css/base.css">
-+    <link rel="stylesheet" href="css/layout.css">
-+    <link rel="stylesheet" href="css/components.css">
-+    <link rel="stylesheet" href="css/animations.css">
-+    <link rel="stylesheet" href="css/responsive.css">
-+    <link rel="stylesheet" href="css/utilities.css">
-+</head>
-+<body>
-+    <!-- Loading Screen -->
-+    <div id="loading-screen" class="loading-screen">
-+        <div class="loading-content">
-+                            <div class="loading-logo">
-+                    <i class="fas fa-fish"></i>
-+                    <h2>Акватеррон</h2>
-+                </div>
-+            <div class="loading-spinner"></div>
-+            <p>Загрузка базы данных...</p>
-+        </div>
-+    </div>
-+
-+    <!-- Main Application -->
-+    <div id="app" class="app hidden">
-+        <!-- Sidebar -->
-+        <aside class="sidebar" id="sidebar">
-+            <div class="sidebar-header">
-+                                    <div class="logo">
-+                        <i class="fas fa-fish"></i>
-+                        <h2>Акватеррон</h2>
-+                    </div>
-+                <button class="sidebar-toggle" id="sidebar-toggle">
-+                    <i class="fas fa-bars"></i>
-+                </button>
-+            </div>
-+            
-+            <nav class="sidebar-nav">
-+                <ul class="nav-list">
-+                    <li class="nav-item">
-+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
-+                            <i class="fas fa-tachometer-alt"></i>
-+                            <span>Главная</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#catalog" class="nav-link" data-section="catalog">
-+                            <i class="fas fa-search"></i>
-+                            <span>Каталог</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#compatibility" class="nav-link" data-section="compatibility">
-+                            <i class="fas fa-check-circle"></i>
-+                            <span>Совместимость</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#my-aquariums" class="nav-link" data-section="my-aquariums">
-+                            <i class="fas fa-tank"></i>
-+                            <span>Мои аквариумы</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#calculator" class="nav-link" data-section="calculator">
-+                            <i class="fas fa-calculator"></i>
-+                            <span>Калькулятор</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#calendar" class="nav-link" data-section="calendar">
-+                            <i class="fas fa-calendar-alt"></i>
-+                            <span>Календарь</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#forum" class="nav-link" data-section="forum">
-+                            <i class="fas fa-comments"></i>
-+                            <span>Форум</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#freelance" class="nav-link" data-section="freelance">
-+                            <i class="fas fa-user-tie"></i>
-+                            <span>Специалисты</span>
-+                        </a>
-+                    </li>
-+                    <li class="nav-item">
-+                        <a href="#profile" class="nav-link" data-section="profile">
-+                            <i class="fas fa-user"></i>
-+                            <span>Профиль</span>
-+                        </a>
-+                    </li>
-+                </ul>
-+            </nav>
-+            
-+            <div class="sidebar-footer">
-+                <div class="user-info">
-+                    <div class="user-avatar">
-+                        <i class="fas fa-user-circle"></i>
-+                    </div>
-+                    <div class="user-details">
-+                        <span class="user-name">Аквариумист</span>
-+                        <span class="user-role">Пользователь</span>
-+                    </div>
-+                </div>
-+            </div>
-+        </aside>
-+
-+        <!-- Main Content -->
-+        <main class="main-content">
-+            <!-- Header -->
-+            <header class="header">
-+                <div class="header-left">
-+                    <h1 id="page-title" class="page-title">Главная</h1>
-+                    <p id="page-description" class="page-description">Планирование идеального аквариума</p>
-+                </div>
-+                
-+                <div class="header-right">
-+                    <div class="header-actions">
-+                        <button class="header-btn" id="notifications-btn" title="Уведомления">
-+                            <i class="fas fa-bell"></i>
-+                            <span class="notification-badge" id="notification-count">0</span>
-+                        </button>
-+                        <button class="header-btn" id="search-btn" title="Поиск">
-+                            <i class="fas fa-search"></i>
-+                        </button>
-+                        <button class="header-btn" id="theme-toggle" title="Сменить тему">
-+                            <i class="fas fa-moon"></i>
-+                        </button>
-+                    </div>
-+                </div>
-+            </header>
-+
-+            <!-- Content Area -->
-+            <div class="content-area">
-+                <!-- Dashboard Section -->
-+                <section id="dashboard" class="section active">
-+                    <div class="section-header">
-+                        <h2>Добро пожаловать в Акватеррон</h2>
-+                        <p>Создайте идеальный аквариум или террариум с нашей помощью</p>
-+                    </div>
-+                    
-+                    <!-- Quick Stats -->
-+                    <div class="stats-grid" id="stats-grid">
-+                        <div class="stat-card">
-+                            <div class="stat-icon">
-+                                <i class="fas fa-fish"></i>
-+                            </div>
-+                            <div class="stat-content">
-+                                <h3>Рыбы</h3>
-+                                <p class="stat-value">1,247</p>
-+                                <p class="stat-status normal">Видов в базе</p>
-+                            </div>
-+                        </div>
-+                        <div class="stat-card">
-+                            <div class="stat-icon">
-+                                <i class="fas fa-seedling"></i>
-+                            </div>
-+                            <div class="stat-content">
-+                                <h3>Растения</h3>
-+                                <p class="stat-value">856</p>
-+                                <p class="stat-status normal">Видов в базе</p>
-+                            </div>
-+                        </div>
-+                        <div class="stat-card">
-+                            <div class="stat-icon">
-+                                <i class="fas fa-dragon"></i>
-+                            </div>
-+                            <div class="stat-content">
-+                                <h3>Рептилии</h3>
-+                                <p class="stat-value">234</p>
-+                                <p class="stat-status normal">Видов в базе</p>
-+                            </div>
-+                        </div>
-+                        <div class="stat-card">
-+                            <div class="stat-icon">
-+                                <i class="fas fa-users"></i>
-+                            </div>
-+                            <div class="stat-content">
-+                                <h3>Пользователи</h3>
-+                                <p class="stat-value">15,892</p>
-+                                <p class="stat-status normal">Активных</p>
-+                            </div>
-+                        </div>
-+                    </div>
-+                    
-+                    <!-- Quick Actions -->
-+                    <div class="dashboard-content">
-+                        <div class="dashboard-main">
-+                            <div class="quick-actions-grid">
-+                                <div class="action-card">
-+                                    <div class="action-icon">
-+                                        <i class="fas fa-search"></i>
-+                                    </div>
-+                                    <h3>Найти рыбу</h3>
-+                                    <p>Поиск по базе данных рыб с фильтрами</p>
-+                                    <button class="btn-primary" onclick="showSection('catalog')">
-+                                        Перейти к поиску
-+                                    </button>
-+                                </div>
-+                                
-+                                <div class="action-card">
-+                                    <div class="action-icon">
-+                                        <i class="fas fa-check-circle"></i>
-+                                    </div>
-+                                    <h3>Проверить совместимость</h3>
-+                                    <p>Узнайте, какие виды совместимы друг с другом</p>
-+                                    <button class="btn-primary" onclick="showSection('compatibility')">
-+                                        Проверить
-+                                    </button>
-+                                </div>
-+                                
-+                                <div class="action-card">
-+                                    <div class="action-icon">
-+                                        <i class="fas fa-plus"></i>
-+                                    </div>
-+                                    <h3>Создать аквариум</h3>
-+                                    <p>Создайте новый аквариум в личном кабинете</p>
-+                                    <button class="btn-primary" onclick="showSection('my-aquariums')">
-+                                        Создать
-+                                    </button>
-+                                </div>
-+                                
-+                                <div class="action-card">
-+                                    <div class="action-icon">
-+                                        <i class="fas fa-calculator"></i>
-+                                    </div>
-+                                    <h3>Калькулятор</h3>
-+                                    <p>Рассчитайте параметры для вашего аквариума</p>
-+                                    <button class="btn-primary" onclick="showSection('calculator')">
-+                                        Рассчитать
-+                                    </button>
-+                                </div>
-+                            </div>
-+                        </div>
-+                        
-+                        <div class="dashboard-sidebar">
-+                            <div class="recent-activity">
-+                                <h3>Последние обновления</h3>
-+                                <div class="activity-list" id="activity-list">
-+                                    <div class="activity-item">
-+                                        <div class="activity-icon">
-+                                            <i class="fas fa-plus"></i>
-+                                        </div>
-+                                        <div class="activity-content">
-+                                            <p>Добавлены новые виды рыб</p>
-+                                            <span class="activity-time">2 часа назад</span>
-+                                        </div>
-+                                    </div>
-+                                    <div class="activity-item">
-+                                        <div class="activity-icon">
-+                                            <i class="fas fa-edit"></i>
-+                                        </div>
-+                                        <div class="activity-content">
-+                                            <p>Обновлена база совместимости</p>
-+                                            <span class="activity-time">1 день назад</span>
-+                                        </div>
-+                                    </div>
-+                                </div>
-+                            </div>
-+                        </div>
-+                    </div>
-+                </section>
-+
-+                <!-- Catalog Section -->
-+                <section id="catalog" class="section">
-+                    <div class="section-header">
-+                        <h2>Каталог</h2>
-+                        <p>Поиск и фильтрация по базе данных</p>
-+                    </div>
-+                    
-+                    <!-- Search and Filters -->
-+                    <div class="catalog-controls">
-+                        <div class="search-box">
-+                            <input type="text" id="search-input" placeholder="Поиск по названию..." class="search-input">
-+                            <button class="search-btn">
-+                                <i class="fas fa-search"></i>
-+                            </button>
-+                        </div>
-+                        
-+                        <div class="filter-controls">
-+                            <select id="category-filter" class="filter-select">
-+                                <option value="all">Все категории</option>
-+                                <option value="fish">Рыбы</option>
-+                                <option value="plants">Растения</option>
-+                                <option value="reptiles">Рептилии</option>
-+                            </select>
-+                            
-+                            <select id="difficulty-filter" class="filter-select">
-+                                <option value="all">Любая сложность</option>
-+                                <option value="easy">Легкая</option>
-+                                <option value="medium">Средняя</option>
-+                                <option value="hard">Сложная</option>
-+                            </select>
-+                            
-+                            <select id="size-filter" class="filter-select">
-+                                <option value="all">Любой размер</option>
-+                                <option value="small">Маленький</option>
-+                                <option value="medium">Средний</option>
-+                                <option value="large">Большой</option>
-+                            </select>
-+                        </div>
-+                    </div>
-+                    
-+                    <!-- Catalog Grid -->
-+                    <div class="catalog-grid" id="catalog-grid">
-+                        <!-- Items will be dynamically generated -->
-+                    </div>
-+                    
-+                    <!-- Pagination -->
-+                    <div class="pagination" id="pagination">
-+                        <!-- Pagination will be dynamically generated -->
-+                    </div>
-+                </section>
-+
-+                <!-- Compatibility Section -->
-+                <section id="compatibility" class="section">
-+                    <div class="section-header">
-+                        <h2>Проверка совместимости</h2>
-+                        <p>Узнайте, какие виды совместимы друг с другом</p>
-+                    </div>
-+                    
-+                    <div class="compatibility-container">
-+                        <div class="compatibility-selector">
-+                            <div class="selector-group">
-+                                <h3>Выберите виды для проверки</h3>
-+                                <div class="species-selector" id="species-selector">
-+                                    <div class="selected-species" id="selected-species">
-+                                        <!-- Selected species will be shown here -->
-+                                    </div>
-+                                    <button class="btn-secondary" id="add-species-btn">
-+                                        <i class="fas fa-plus"></i>
-+                                        Добавить вид
-+                                    </button>
-+                                </div>
-+                            </div>
-+                            
-+                            <div class="compatibility-results" id="compatibility-results">
-+                                <!-- Results will be shown here -->
-+                            </div>
-+                        </div>
-+                    </div>
-+                </section>
-+
-+                <!-- My Aquariums Section -->
-+                <section id="my-aquariums" class="section">
-+                    <div class="section-header">
-+                        <h2>Мои аквариумы</h2>
-+                        <p>Управление вашими аквариумами и террариумами</p>
-+                    </div>
-+                    
-+                    <div class="aquariums-container">
-+                        <div class="aquariums-header">
-+                            <button class="btn-primary" id="create-aquarium-btn">
-+                                <i class="fas fa-plus"></i>
-+                                Создать новый аквариум
-+                            </button>
-+                        </div>
-+                        
-+                        <div class="aquariums-grid" id="aquariums-grid">
-+                            <!-- Aquariums will be dynamically generated -->
-+                        </div>
-+                    </div>
-+                </section>
-+
-+                <!-- Calculator Section -->
-+                <section id="calculator" class="section">
-+                    <div class="section-header">
-+                        <h2>Калькулятор аквариума</h2>
-+                        <p>Рассчитайте параметры для вашего аквариума</p>
-+                    </div>
-+                    
-+                    <div class="calculator-container">
-+                        <div class="calculator-form">
-+                            <div class="form-group">
-+                                <label for="aquarium-length">Длина (см)</label>
-+                                <input type="number" id="aquarium-length" class="form-input" min="10" max="500">
-+                            </div>
-+                            
-+                            <div class="form-group">
-+                                <label for="aquarium-width">Ширина (см)</label>
-+                                <input type="number" id="aquarium-width" class="form-input" min="10" max="200">
-+                            </div>
-+                            
-+                            <div class="form-group">
-+                                <label for="aquarium-height">Высота (см)</label>
-+                                <input type="number" id="aquarium-height" class="form-input" min="10" max="200">
-+                            </div>
-+                            
-+                            <button class="btn-primary" id="calculate-btn">
-+                                Рассчитать
-+                            </button>
-+                        </div>
-+                        
-+                        <div class="calculator-results" id="calculator-results">
-+                            <!-- Results will be shown here -->
-+                        </div>
-+                    </div>
-+                </section>
-+
-+                <!-- Calendar Section -->
-+                <section id="calendar" class="section">
-+                    <div class="section-header">
-+                        <h2>Календарь</h2>
-+                        <p>Планировщик задач и история обслуживания</p>
-+                    </div>
-+                    <div class="calendar-container">
-+                        <div class="form-row">
-+                            <div class="form-group">
-+                                <label for="calendar-system-select">Система</label>
-+                                <select id="calendar-system-select" class="form-select">
-+                                    <option value="all">Все</option>
-+                                </select>
-+                            </div>
-+                            <div class="form-group">
-+                                <label for="calendar-type-select">Тип задачи</label>
-+                                <select id="calendar-type-select" class="form-select">
-+                                    <option value="all">Любая</option>
-+                                    <option value="water_change">Подмена воды</option>
-+                                    <option value="feeding">Кормление</option>
-+                                    <option value="filter_clean">Чистка фильтра</option>
-+                                    <option value="measurement">Замеры</option>
-+                                    <option value="note">Заметка</option>
-+                                </select>
-+                            </div>
-+                        </div>
-+
-+                        <div class="calendar-form">
-+                            <div class="form-row">
-+                                <div class="form-group">
-+                                    <label for="calendar-date">Дата</label>
-+                                    <input type="date" id="calendar-date" class="form-input">
-+                                </div>
-+                                <div class="form-group">
-+                                    <label for="calendar-title">Событие</label>
-+                                    <input type="text" id="calendar-title" class="form-input" placeholder="Например: Подмена воды 30%">
-+                                </div>
-+                                <div class="form-group">
-+                                    <label for="calendar-notes">Заметка</label>
-+                                    <input type="text" id="calendar-notes" class="form-input" placeholder="Опционально">
-+                                </div>
-+                                <div class="form-group">
-+                                    <label>&nbsp;</label>
-+                                    <button class="btn-primary" id="calendar-add-btn">Добавить</button>
-+                                </div>
-+                            </div>
-+                        </div>
-+
-+                        <div class="calendar-list" id="calendar-list"></div>
-+                    </div>
-+                </section>
-+
-+                <!-- Forum Section -->
-+                <section id="forum" class="section">
-+                    <div class="section-header">
-+                        <h2>Форум</h2>
-+                        <p>Обсуждения: болезни, дизайн, ошибки, оборудование</p>
-+                    </div>
-+                    <div class="forum-controls">
-+                        <div class="form-row">
-+                            <div class="form-group">
-+                                <label for="forum-category">Категория</label>
-+                                <select id="forum-category" class="form-select">
-+                                    <option value="all">Все</option>
-+                                    <option value="diseases">Болезни</option>
-+                                    <option value="design">Дизайн</option>
-+                                    <option value="equipment">Оборудование</option>
-+                                    <option value="errors">Ошибки</option>
-+                                </select>
-+                            </div>
-+                            <div class="form-group">
-+                                <label for="forum-search">Поиск</label>
-+                                <input id="forum-search" class="form-input" placeholder="Поиск по темам...">
-+                            </div>
-+                        </div>
-+                    </div>
-+                    <div class="catalog-grid" id="forum-topics"></div>
-+                </section>
-+
-+                <!-- Freelance Section -->
-+                <section id="freelance" class="section">
-+                    <div class="section-header">
-+                        <h2>Специалисты</h2>
-+                        <p>Найдите мастера по обслуживанию рядом с вами</p>
-+                    </div>
-+                    <div class="filter-controls">
-+                        <div class="filter-group">
-+                            <span class="filter-label">Город</span>
-+                            <select id="freelance-city" class="filter-select">
-+                                <option value="all">Все</option>
-+                                <option value="Москва">Москва</option>
-+                                <option value="Санкт-Петербург">Санкт-Петербург</option>
-+                                <option value="Новосибирск">Новосибирск</option>
-+                                <option value="Екатеринбург">Екатеринбург</option>
-+                            </select>
-+                        </div>
-+                        <div class="filter-group">
-+                            <span class="filter-label">Специализация</span>
-+                            <select id="freelance-specialty" class="filter-select">
-+                                <option value="all">Все</option>
-+                                <option value="aquarium">Аквариумы</option>
-+                                <option value="terrarium">Террариумы</option>
-+                                <option value="design">Дизайн</option>
-+                                <option value="diagnostics">Диагностика</option>
-+                            </select>
-+                        </div>
-+                    </div>
-+                    <div class="catalog-grid" id="freelance-list"></div>
-+                </section>
-+
-+                <!-- Profile Section -->
-+                <section id="profile" class="section">
-+                    <div class="section-header">
-+                        <h2>Профиль</h2>
-+                        <p>Настройки аккаунта и предпочтения</p>
-+                    </div>
-+                    
-+                    <div class="profile-container">
-+                        <div class="profile-card">
-+                            <div class="profile-header">
-+                                <div class="profile-avatar">
-+                                    <i class="fas fa-user-circle"></i>
-+                                </div>
-+                                <div class="profile-info">
-+                                    <h3>Аквариумист</h3>
-+                                    <p>Пользователь</p>
-+                                </div>
-+                            </div>
-+                            
-+                            <div class="profile-stats">
-+                                <div class="stat-item">
-+                                    <span class="stat-label">Аквариумов</span>
-+                                    <span class="stat-value">0</span>
-+                                </div>
-+                                <div class="stat-item">
-+                                    <span class="stat-label">Дней в системе</span>
-+                                    <span class="stat-value">1</span>
-+                                </div>
-+                            </div>
-+                        </div>
-+                        
-+                        <div class="settings-card">
-+                            <h3>Настройки</h3>
-+                            <div class="setting-group">
-+                                <label for="language-select">Язык</label>
-+                                <select id="language-select" class="setting-select">
-+                                    <option value="ru" selected>Русский</option>
-+                                    <option value="en">English</option>
-+                                </select>
-+                            </div>
-+                            
-+                            <div class="setting-group">
-+                                <label for="theme-select">Тема</label>
-+                                <select id="theme-select" class="setting-select">
-+                                    <option value="light" selected>Светлая</option>
-+                                    <option value="dark">Темная</option>
-+                                </select>
-+                            </div>
-+                        </div>
-+                    </div>
-+                </section>
-+            </div>
-+        </main>
-+    </div>
-+
-+    <!-- Species Modal -->
-+    <div class="modal" id="species-modal">
-+        <div class="modal-content">
-+            <div class="modal-header">
-+                <h3>Выбор вида</h3>
-+                <button class="modal-close" id="species-modal-close">
-+                    <i class="fas fa-times"></i>
-+                </button>
-+            </div>
-+            <div class="modal-body">
-+                <div class="species-search">
-+                    <input type="text" id="species-search-input" placeholder="Поиск вида..." class="search-input">
-+                </div>
-+                <div class="species-list" id="species-list">
-+                    <!-- Species list will be dynamically generated -->
-+                </div>
-+            </div>
-+        </div>
-+    </div>
-+
-+    <!-- Create Aquarium Modal -->
-+    <div class="modal" id="create-aquarium-modal">
-+        <div class="modal-content">
-+            <div class="modal-header">
-+                <h3>Создать новый аквариум</h3>
-+                <button class="modal-close" id="create-aquarium-modal-close">
-+                    <i class="fas fa-times"></i>
-+                </button>
-+            </div>
-+            <div class="modal-body">
-+                <form id="create-aquarium-form">
-+                    <div class="form-group">
-+                        <label for="aquarium-name">Название аквариума</label>
-+                        <input type="text" id="aquarium-name" class="form-input" required>
-+                    </div>
-+                    
-+                    <div class="form-group">
-+                        <label for="aquarium-type">Тип</label>
-+                        <select id="aquarium-type" class="form-select" required>
-+                            <option value="freshwater">Пресноводный</option>
-+                            <option value="saltwater">Морской</option>
-+                            <option value="terrarium">Террариум</option>
-+                        </select>
-+                    </div>
-+                    
-+                    <div class="form-row">
-+                        <div class="form-group">
-+                            <label for="aquarium-volume">Объем (л)</label>
-+                            <input type="number" id="aquarium-volume" class="form-input" min="1" required>
-+                        </div>
-+                        
-+                        <div class="form-group">
-+                            <label for="aquarium-temp">Температура (°C)</label>
-+                            <input type="number" id="aquarium-temp" class="form-input" min="15" max="35" step="0.5">
-+                        </div>
-+                    </div>
-+                    
-+                    <div class="form-actions">
-+                        <button type="button" class="btn-secondary" id="cancel-create-aquarium">Отмена</button>
-+                        <button type="submit" class="btn-primary">Создать</button>
-+                    </div>
-+                </form>
-+            </div>
-+        </div>
-+    </div>
-+
-+    <!-- Modal Overlay -->
-+    <div class="modal-overlay" id="modal-overlay"></div>
-+
-+    <!-- Scripts -->
-+    <script src="js/data/species-database.js"></script>
-+    <script src="js/utils/helpers.js"></script>
-+    <script src="js/utils/storage.js"></script>
-+    <script src="js/utils/notifications.js"></script>
-+    <script src="js/components/modal.js"></script>
-+    <script src="js/components/search.js"></script>
-+    <script src="js/pages/dashboard.js"></script>
-+    <script src="js/pages/catalog.js"></script>
-+    <script src="js/pages/compatibility.js"></script>
-+    <script src="js/pages/aquariums.js"></script>
-+    <script src="js/pages/calculator.js"></script>
-+    <script src="js/pages/calendar.js"></script>
-+    <script src="js/pages/forum.js"></script>
-+    <script src="js/pages/freelance.js"></script>
-+    <script src="js/pages/profile.js"></script>
-+    <script src="js/app.js"></script>
-+</body>
-+</html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Акватеррон - Система планирования аквариумов и террариумов">
+    <title>Акватеррон</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/utilities.css">
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo"><i class="fas fa-fish"></i><h2>Акватеррон</h2></div>
+            <div class="loading-spinner"></div>
+            <p>Загрузка базы данных...</p>
+        </div>
+    </div>
+
+    <div id="app" class="app hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-fish"></i><h2>Акватеррон</h2></div>
+                <button class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li><a href="#dashboard" class="nav-link active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i><span>Главная</span></a></li>
+                    <li><a href="#catalog" class="nav-link" data-section="catalog"><i class="fas fa-search"></i><span>Каталог</span></a></li>
+                    <li><a href="#compatibility" class="nav-link" data-section="compatibility"><i class="fas fa-check-circle"></i><span>Совместимость</span></a></li>
+                    <li><a href="#my-aquariums" class="nav-link" data-section="my-aquariums"><i class="fas fa-tank"></i><span>Мои аквариумы</span></a></li>
+                    <li><a href="#calculator" class="nav-link" data-section="calculator"><i class="fas fa-calculator"></i><span>Калькулятор</span></a></li>
+                    <li><a href="#calendar" class="nav-link" data-section="calendar"><i class="fas fa-calendar-alt"></i><span>Календарь</span></a></li>
+                    <li><a href="#forum" class="nav-link" data-section="forum"><i class="fas fa-comments"></i><span>Форум</span></a></li>
+                    <li><a href="#freelance" class="nav-link" data-section="freelance"><i class="fas fa-user-tie"></i><span>Специалисты</span></a></li>
+                    <li><a href="#profile" class="nav-link" data-section="profile"><i class="fas fa-user"></i><span>Профиль</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="page-title" class="page-title">Главная</h1>
+                    <p id="page-description" class="page-description">Планирование идеального аквариума</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="header-btn" id="notifications-btn" title="Уведомления"><i class="fas fa-bell"></i><span class="notification-badge" id="notification-count">0</span></button>
+                        <button class="header-btn" id="search-btn" title="Поиск"><i class="fas fa-search"></i></button>
+                        <button class="header-btn" id="theme-toggle" title="Сменить тему"><i class="fas fa-moon"></i></button>
+                    </div>
+                </div>
+            </header>
+            <div class="content-area">
+                <section id="dashboard" class="section active">
+                    <div class="section-header"><h2>Добро пожаловать в Акватеррон</h2><p>Создайте идеальный аквариум или террариум</p></div>
+                    <div class="stats-grid" id="stats-grid">
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-fish"></i></div><div class="stat-content"><h3>Рыбы</h3><p class="stat-value">1,247</p><p class="stat-status normal">Видов в базе</p></div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-seedling"></i></div><div class="stat-content"><h3>Растения</h3><p class="stat-value">856</p><p class="stat-status normal">Видов в базе</p></div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-dragon"></i></div><div class="stat-content"><h3>Рептилии</h3><p class="stat-value">234</p><p class="stat-status normal">Видов в базе</p></div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-content"><h3>Пользователи</h3><p class="stat-value">15,892</p><p class="stat-status normal">Активных</p></div></div>
+                    </div>
+                </section>
+                <section id="catalog" class="section">
+                    <div class="section-header"><h2>Каталог</h2><p>Поиск и фильтрация по базе</p></div>
+                    <div class="catalog-controls">
+                        <div class="search-box"><input type="text" id="search-input" placeholder="Поиск по названию..." class="search-input"><button class="search-btn"><i class="fas fa-search"></i></button></div>
+                        <div class="filter-controls">
+                            <select id="category-filter" class="filter-select"><option value="all">Все категории</option><option value="fish">Рыбы</option><option value="plants">Растения</option><option value="reptiles">Рептилии</option></select>
+                            <select id="difficulty-filter" class="filter-select"><option value="all">Любая сложность</option><option value="easy">Легкая</option><option value="medium">Средняя</option><option value="hard">Сложная</option></select>
+                            <select id="size-filter" class="filter-select"><option value="all">Любой размер</option><option value="small">Маленький</option><option value="medium">Средний</option><option value="large">Большой</option></select>
+                        </div>
+                    </div>
+                    <div class="catalog-grid" id="catalog-grid"></div>
+                    <div class="pagination" id="pagination"></div>
+                </section>
+                <section id="compatibility" class="section">
+                    <div class="section-header"><h2>Проверка совместимости</h2><p>Узнайте совместимость видов</p></div>
+                    <div class="compatibility-container">
+                        <div class="compatibility-selector">
+                            <div class="selector-group"><h3>Выберите виды для проверки</h3>
+                                <div class="species-selector" id="species-selector">
+                                    <div class="selected-species" id="selected-species"></div>
+                                    <button class="btn-secondary" id="add-species-btn"><i class="fas fa-plus"></i>Добавить вид</button>
+                                </div>
+                            </div>
+                            <div class="compatibility-results" id="compatibility-results"></div>
+                        </div>
+                    </div>
+                </section>
+                <section id="my-aquariums" class="section">
+                    <div class="section-header"><h2>Мои аквариумы</h2><p>Управление системами</p></div>
+                    <div class="aquariums-container">
+                        <div class="aquariums-header"><button class="btn-primary" id="create-aquarium-btn"><i class="fas fa-plus"></i>Создать новый аквариум</button></div>
+                        <div class="aquariums-grid" id="aquariums-grid"></div>
+                    </div>
+                </section>
+                <section id="calculator" class="section">
+                    <div class="section-header"><h2>Калькулятор аквариума</h2><p>Рассчитайте параметры</p></div>
+                    <div class="calculator-container">
+                        <div class="calculator-form">
+                            <div class="form-group"><label for="aquarium-length">Длина (см)</label><input type="number" id="aquarium-length" class="form-input" min="10" max="500"></div>
+                            <div class="form-group"><label for="aquarium-width">Ширина (см)</label><input type="number" id="aquarium-width" class="form-input" min="10" max="200"></div>
+                            <div class="form-group"><label for="aquarium-height">Высота (см)</label><input type="number" id="aquarium-height" class="form-input" min="10" max="200"></div>
+                            <button class="btn-primary" id="calculate-btn">Рассчитать</button>
+                        </div>
+                        <div class="calculator-results" id="calculator-results"></div>
+                    </div>
+                </section>
+                <section id="calendar" class="section">
+                    <div class="section-header"><h2>Календарь</h2><p>Планировщик задач</p></div>
+                    <div class="calendar-container">
+                        <div class="form-row">
+                            <div class="form-group"><label for="calendar-system-select">Система</label><select id="calendar-system-select" class="form-select"><option value="all">Все</option></select></div>
+                            <div class="form-group"><label for="calendar-type-select">Тип задачи</label><select id="calendar-type-select" class="form-select"><option value="all">Любая</option><option value="water_change">Подмена воды</option><option value="feeding">Кормление</option><option value="filter_clean">Чистка фильтра</option><option value="measurement">Замеры</option><option value="note">Заметка</option></select></div>
+                        </div>
+                        <div class="calendar-form">
+                            <div class="form-row">
+                                <div class="form-group"><label for="calendar-date">Дата</label><input type="date" id="calendar-date" class="form-input"></div>
+                                <div class="form-group"><label for="calendar-title">Событие</label><input type="text" id="calendar-title" class="form-input" placeholder="Например: Подмена воды 30%"></div>
+                                <div class="form-group"><label for="calendar-notes">Заметка</label><input type="text" id="calendar-notes" class="form-input" placeholder="Опционально"></div>
+                                <div class="form-group"><label>&nbsp;</label><button class="btn-primary" id="calendar-add-btn">Добавить</button></div>
+                            </div>
+                        </div>
+                        <div class="calendar-list" id="calendar-list"></div>
+                    </div>
+                </section>
+                <section id="forum" class="section">
+                    <div class="section-header"><h2>Форум</h2><p>Обсуждения</p></div>
+                    <div class="forum-controls">
+                        <div class="form-row">
+                            <div class="form-group"><label for="forum-category">Категория</label><select id="forum-category" class="form-select"><option value="all">Все</option><option value="diseases">Болезни</option><option value="design">Дизайн</option><option value="equipment">Оборудование</option><option value="errors">Ошибки</option></select></div>
+                            <div class="form-group"><label for="forum-search">Поиск</label><input id="forum-search" class="form-input" placeholder="Поиск по темам..."></div>
+                        </div>
+                    </div>
+                    <div class="catalog-grid" id="forum-topics"></div>
+                </section>
+                <section id="freelance" class="section">
+                    <div class="section-header"><h2>Специалисты</h2><p>Найдите мастера рядом</p></div>
+                    <div class="filter-controls">
+                        <div class="filter-group"><span class="filter-label">Город</span><select id="freelance-city" class="filter-select"><option value="all">Все</option><option value="Москва">Москва</option><option value="Санкт-Петербург">Санкт-Петербург</option><option value="Новосибирск">Новосибирск</option><option value="Екатеринбург">Екатеринбург</option></select></div>
+                        <div class="filter-group"><span class="filter-label">Специализация</span><select id="freelance-specialty" class="filter-select"><option value="all">Все</option><option value="aquarium">Аквариумы</option><option value="terrarium">Террариумы</option><option value="design">Дизайн</option><option value="diagnostics">Диагностика</option></select></div>
+                    </div>
+                    <div class="catalog-grid" id="freelance-list"></div>
+                </section>
+                <section id="profile" class="section">
+                    <div class="section-header"><h2>Профиль</h2><p>Настройки аккаунта</p></div>
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <div class="profile-header"><div class="profile-avatar"><i class="fas fa-user-circle"></i></div><div class="profile-info"><h3>Аквариумист</h3><p>Пользователь</p></div></div>
+                            <div class="profile-stats"><div class="stat-item"><span class="stat-label">Аквариумов</span><span class="stat-value">0</span></div><div class="stat-item"><span class="stat-label">Дней в системе</span><span class="stat-value">1</span></div></div>
+                        </div>
+                        <div class="settings-card">
+                            <h3>Настройки</h3>
+                            <div class="setting-group"><label for="language-select">Язык</label><select id="language-select" class="setting-select"><option value="ru" selected>Русский</option><option value="en">English</option></select></div>
+                            <div class="setting-group"><label for="theme-select">Тема</label><select id="theme-select" class="setting-select"><option value="light" selected>Светлая</option><option value="dark">Темная</option></select></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="species-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Выбор вида</h3><button class="modal-close" id="species-modal-close"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <div class="species-search"><input type="text" id="species-search-input" placeholder="Поиск вида..." class="search-input"></div>
+                <div class="species-list" id="species-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="create-aquarium-modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Создать новый аквариум</h3><button class="modal-close" id="create-aquarium-modal-close"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <form id="create-aquarium-form">
+                    <div class="form-group"><label for="aquarium-name">Название аквариума</label><input type="text" id="aquarium-name" class="form-input" required></div>
+                    <div class="form-group"><label for="aquarium-type">Тип</label><select id="aquarium-type" class="form-select" required><option value="freshwater">Пресноводный</option><option value="saltwater">Морской</option><option value="terrarium">Террариум</option></select></div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="aquarium-volume">Объем (л)</label><input type="number" id="aquarium-volume" class="form-input" min="1" required></div>
+                        <div class="form-group"><label for="aquarium-temp">Температура (°C)</label><input type="number" id="aquarium-temp" class="form-input" min="15" max="35" step="0.5"></div>
+                    </div>
+                    <div class="form-actions"><button type="button" class="btn-secondary" id="cancel-create-aquarium">Отмена</button><button type="submit" class="btn-primary">Создать</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <script src="js/data/species-database.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/notifications.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/components/search.js"></script>
+    <script src="js/pages/dashboard.js"></script>
+    <script src="js/pages/catalog.js"></script>
+    <script src="js/pages/compatibility.js"></script>
+    <script src="js/pages/aquariums.js"></script>
+    <script src="js/pages/calculator.js"></script>
+    <script src="js/pages/calendar.js"></script>
+    <script src="js/pages/forum.js"></script>
+    <script src="js/pages/freelance.js"></script>
+    <script src="js/pages/profile.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
